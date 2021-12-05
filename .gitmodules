@@ -14,3 +14,7 @@
 	path = mib-content-filter
 	url = git@github.com:squad03mib/mib-content-filter.git
 	branch = main
+[submodule "api-gateway"]
+	path = api-gateway
+	url = git@github.com:squad03mib/api-gateway.git
+	branch = main
