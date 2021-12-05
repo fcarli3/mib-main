@@ -1,0 +1,16 @@
+[submodule "mib-users"]
+	path = mib-users
+	url = git@github.com:squad03mib/mib-users.git
+	branch = main
+[submodule "mib-messages"]
+	path = mib-messages
+	url = git@github.com:squad03mib/mib-messages.git
+	branch = main
+[submodule "mib-lottery"]
+	path = mib-lottery
+	url = git@github.com:squad03mib/mib-lottery.git
+	branch = main
+[submodule "mib-content-filter"]
+	path = mib-content-filter
+	url = git@github.com:squad03mib/mib-content-filter.git
+	branch = main
