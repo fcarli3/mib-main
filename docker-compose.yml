@@ -160,17 +160,68 @@ services:
     #
     # Lottery Microservice Worker node
     #
-    build: ./mib-lottery
-    restart: on-failure
+    <<:
+      &lottery_ms_worker
+      build: ./mib-lottery
+      restart: on-failure
+
     env_file:
       - lottery_ms.conf
     environment:
       - POSTGRES_HOST=lottery_ms_db
+      - BROKER_URL=redis://redis_lottery
+      - RESULT_BACKEND=redis://redis_lottery
     depends_on:
-      lottery_ms_db:
-        condition: service_healthy
-      lottery_ms_migrations:
-        condition: service_started
+      - lottery_ms_db
+      - lottery_ms_migrations
+      - redis_lottery
+
+  redis_lottery:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
+    expose:
+      - "6379"
+
+  celery_worker_lottery:
+    <<: *lottery_ms_worker
+    command:
+      [
+        'celery',
+        '-A',
+        'swagger_server.background',
+        'worker',
+        '--loglevel=INFO'
+      ]
+    env_file:
+      - lottery_ms.conf
+    environment:
+      - POSTGRES_HOST=lottery_ms_db
+      - BROKER_URL=redis://redis_lottery
+      - RESULT_BACKEND=redis://redis_lottery
+    depends_on:
+      - lottery_ms_db
+      - redis_lottery
+
+  celery_beat_lottery:
+    <<: *lottery_ms_worker
+    command:
+      [
+        'celery',
+        '-A',
+        'swagger_server.background',
+        'beat',
+        '--loglevel=INFO'
+      ]
+    env_file:
+      - lottery_ms.conf
+    environment:
+      - POSTGRES_HOST=lottery_ms_db
+      - BROKER_URL=redis://redis_lottery
+      - RESULT_BACKEND=redis://redis_lottery
+    depends_on:
+      - lottery_ms_db
+      - redis_lottery
 
 volumes:
   # -------------------------------------------- #
