@@ -62,6 +62,7 @@ services:
     environment:
       - USERS_MS_HOST=users_ms_worker
       - LOTTERY_MS_HOST=lottery_ms_worker
+      - MESSAGES_MS_HOST=messages_ms_worker
     labels:
       - mib.api_gateway_worker
 
@@ -244,10 +245,10 @@ services:
     - "6389:6389"
     #- "6379:6379"
 
-  mib_messages:
+  messages_ms_worker:
     <<:
       # Building the image
-      &mib_messages
+      &messages_ms_worker
       image: "mib-messages:latest"
       build:
         context: ./mib-messages
@@ -275,7 +276,7 @@ services:
     #
     # this service is used to apply migrations on db
     #
-    <<: *mib_messages
+    <<: *messages_ms_worker
     command: flask db upgrade
     env_file:
       - messages_ms.conf
@@ -286,7 +287,7 @@ services:
       - db_messages
   
   celery_worker_messages:
-    <<: *mib_messages
+    <<: *messages_ms_worker
     command: ['celery', '-A', 'swagger_server.background', 'worker', '--loglevel=DEBUG']
     env_file:
       - messages_ms.conf
@@ -299,7 +300,7 @@ services:
       - redis_messages
 
   celery_beat_messages:
-    <<: *mib_messages
+    <<: *messages_ms_worker
     command: ['celery', '-A', 'swagger_server.background', 'beat', '--loglevel=DEBUG']
     env_file:
       - messages_ms.conf
