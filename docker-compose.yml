@@ -255,7 +255,7 @@ services:
         dockerfile: Dockerfile
 
     ports:
-      - "8080:8080"
+      - "5003:5003"
     env_file:
       - messages_ms.conf
     environment:
