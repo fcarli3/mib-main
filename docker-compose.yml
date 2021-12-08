@@ -232,7 +232,7 @@ services:
     image: postgres:13
     restart: unless-stopped
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/db_messages/data
     ports:
       # this is only for development purpose
       - "5342:5342"
@@ -319,7 +319,7 @@ services:
     image: postgres:13
     restart: unless-stopped
     volumes:
-      - pgdata:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/db_content_filter/data
     env_file:
       - content_filter_ms.conf
 
