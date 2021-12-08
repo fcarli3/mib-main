@@ -336,7 +336,7 @@ services:
     env_file:
       - content_filter_ms.conf
     environment:
-      - POSTGRES_HOST=db
+      - POSTGRES_HOST=db_content_filter
     depends_on:
       - db_content_filter
       - migrations_content_filter
@@ -350,7 +350,7 @@ services:
     env_file:
       - content_filter_ms.conf
     environment:
-      - POSTGRES_HOST=db
+      - POSTGRES_HOST=db_content_filter
     restart: on-failure
     depends_on:
       - db_content_filter
