@@ -262,8 +262,9 @@ services:
       - POSTGRES_HOST=db_messages
       - BROKER_URL=redis://redis_messages
       - RESULT_BACKEND=redis://redis_messages
-      - USERS_MS_URL=users_ms_worker
-      - LOTTERY_MS_URL=lottery_ms_worker
+      - USERS_MS_HOST=users_ms_worker
+      - LOTTERY_MS_HOST=lottery_ms_worker
+      - CONTENT_FILTER_MS_HOST=content_filter_ms_worker
     depends_on:
       - db_messages
       - migrations_messages
@@ -295,6 +296,7 @@ services:
       - POSTGRES_HOST=db_messages
       - BROKER_URL=redis://redis_messages
       - RESULT_BACKEND=redis://redis_messages
+      - USERS_MS_HOST=users_ms_worker
     depends_on:
       - db_messages
       - redis_messages
