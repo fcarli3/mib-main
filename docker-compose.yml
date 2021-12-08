@@ -332,7 +332,7 @@ services:
         context: ./mib-content-filter
         dockerfile: Dockerfile
     ports:
-      - "5001:5001"
+      - "5005:5005"
     env_file:
       - content_filter_ms.conf
     environment:
