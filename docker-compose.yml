@@ -311,6 +311,49 @@ services:
     depends_on:
       - db_messages
       - redis_messages
+    
+  # -------------------------------------------- #
+  # Content Filter Microservice                  #
+  # -------------------------------------------- #
+  db_content_filter:
+    image: postgres:13
+    restart: unless-stopped
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    env_file:
+      - content_filter_ms.conf
+
+  content_filter_ms_worker:
+    <<:
+      # Building the image
+      &content_filter_ms_worker
+      image: "mib-content_filter:latest"
+      build:
+        context: ./mib-content-filter
+        dockerfile: Dockerfile
+    ports:
+      - "5001:5001"
+    env_file:
+      - content_filter_ms.conf
+    environment:
+      - POSTGRES_HOST=db
+    depends_on:
+      - db_content_filter
+      - migrations_content_filter
+
+  migrations_content_filter:
+    #
+    # this service is used to apply migrations on db
+    #
+    <<: *content_filter_ms_worker
+    command: flask db upgrade
+    env_file:
+      - content_filter_ms.conf
+    environment:
+      - POSTGRES_HOST=db
+    restart: on-failure
+    depends_on:
+      - db_content_filter
 
 volumes:
   # -------------------------------------------- #
