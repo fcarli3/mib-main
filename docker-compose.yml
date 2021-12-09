@@ -63,6 +63,7 @@ services:
       - USERS_MS_HOST=users_ms_worker
       - LOTTERY_MS_HOST=lottery_ms_worker
       - MESSAGES_MS_HOST=messages_ms_worker
+      - CONTENT_FILTER_MS_HOST=content_filter_ms_worker
     labels:
       - mib.api_gateway_worker
 
